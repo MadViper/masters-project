@@ -1,0 +1,175 @@
+{% extends "common/base.html" %}
+
+{% block body %}
+    <div class="container">
+        <h2>Pattern creator</h2>
+        <form method="POST">
+
+            <div class="form-row">
+                <div class="col">
+                    <label>Performers:</label>
+                </div>
+            </div>
+
+            <div class="container">
+
+                <div class="form-row">
+
+                    <div class="col">
+                        <select class="form-control" id="performer_1" name="performer_1" title="performer_1">
+                            <option value=".*">*</option>
+                            {% for performer in performers %}
+                                <option value={{ performer }}>{{ performer }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>->[:works-with]-></label>
+                    </div>
+
+
+                    <div class="col">
+                        <select class="form-control" id="performer_2" name="performer_2" title="performer_2">
+                            <option value=".*">*</option>
+                            {% for performer in performers %}
+                                <option value={{ performer }}>{{ performer }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <label>Pattern length:</label>
+                </div>
+            </div>
+
+            <div class="container">
+
+                <div class="form-row">
+                    <div class="col">
+                        <input type="radio" id="radio_0" name="pattern_length_type" value="any" checked="checked"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="radio_0">Any</label>
+                    </div>
+
+
+                    <div class="col">
+
+                    </div>
+
+                    <div class="col">
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <input type="radio" id="radio_1" name="pattern_length_type" value="exactly"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="radio_1">Exactly</label>
+                    </div>
+
+
+                    <div class="col">
+                        <input type="number" min="0" class="form-control" id="length_exactly"
+                               placeholder="pattern length" name="exactly">
+                    </div>
+
+                    <div class="col">
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <input type="radio" id="radio_2" name="pattern_length_type" value="at_least"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="radio_2">At least</label>
+                    </div>
+
+
+                    <div class="col">
+                        <input type="number" min="0" class="form-control" id="length_at_least"
+                               placeholder="pattern length" name="at_least">
+                    </div>
+
+                    <div class="col">
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <input type="radio" id="radio_3" name="pattern_length_type" value="at_most"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="radio_3">At most</label>
+                    </div>
+
+
+                    <div class="col">
+                        <input type="number" min="0" class="form-control" id="length_at_most"
+                               placeholder="pattern length" name="at_most">
+                    </div>
+
+                    <div class="col"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <input type="radio" id="radio_4" name="pattern_length_type" value="between"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="radio_4">Between</label>
+                    </div>
+
+
+                    <div class="col">
+                        <input type="number" min="0" class="form-control" id="lower_bound"
+                               placeholder="lower bound" name="lower_bound">
+                    </div>
+
+                    <div class="col">
+                        <input type="number" min="0" class="form-control" id="upper_bound"
+                               placeholder="upper bound" name="upper_bound">
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="same_activity">Same activity: </label>
+                    </div>
+
+                    <div class="col">
+                        <input type="checkbox" id="same_activity" name="same_activity">
+                    </div>
+
+                    <div class="col">
+                        <label for="different_performers">Different performers: </label>
+                    </div>
+
+                    <div class="col">
+                        <input type="checkbox" id="different_performers" name="different_performers">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-lg col">Search</button>
+
+            </div>
+
+
+        </form>
+    </div>
+{% endblock %}
