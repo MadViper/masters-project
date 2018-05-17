@@ -31,13 +31,12 @@ def create_works_with_relations():
     WHERE i1.timestamp - i2.timestamp = 1
     WITH
         c.id as case,
-        i1.performer as p1name,
-        i2.performer as p2name,
-        i1.timestamp as finish,
-        i2.timestamp as start
+        i1.performer as p1name, i2.performer as p2name,
+        a1.name as a1name, a2.name as a2name,
+        i1.timestamp as finish, i2.timestamp as start
     MERGE (p1:performer {name: p1name})
     MERGE (p2:performer {name: p2name})
-    MERGE (p2)-[w:works_with {case: case, start: start, finish: finish}]->(p1)
+    MERGE (p2)-[w:works_with {case: case, a1: a1name, start: start, a2: a2name, finish: finish}]->(p1)
     RETURN p1, w, p2
     '''
     run_query(query)
