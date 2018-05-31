@@ -21,15 +21,11 @@ logger.addHandler(handler)
 
 logging.getLogger("neo4j.bolt").setLevel(logging.CRITICAL)
 
-DEFAULT_USER = "app92124873-nY8mkb"
-DEFAULT_PASSWORD = "b.hrxpJRs9BVRq.ZqM9sSBJTMkU2OfR"
-DEFAULT_DRIVER_URI = "bolt://hobby-ooiobamoecilgbkepmmbabal.dbs.graphenedb.com:24786"
-
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "this should be changed"
-db_username = os.environ.get("GRAPHENEDB_BOLT_USER", default=DEFAULT_USER)
-db_password = os.environ.get("GRAPHENEDB_BOLT_PASSWORD", default=DEFAULT_PASSWORD)
-driver_uri = os.environ.get("GRAPHENEDB_BOLT_URL", default=DEFAULT_DRIVER_URI)
+app.config["SECRET_KEY"] = os.environ.get("APP_SECRET", default="dummy_secret")
+db_username = os.environ.get("DB_USER")
+db_password = os.environ.get("DB_PASSWORD")
+driver_uri = os.environ.get("BOLT_URL")
 driver = GraphDatabase.driver(driver_uri, auth=basic_auth(db_username, db_password))
 dal = DAL(driver)
 
