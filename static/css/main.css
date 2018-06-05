@@ -20,3 +20,9 @@
   font-weight: bold;
   margin: 10px;
 }
+
+#vis {
+    width: 900px;
+    height: 700px;
+    border: 1px solid lightgray;
+}
