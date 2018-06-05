@@ -1,0 +1,22 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+    <script src="https://cdn.rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+{% endblock %}
+
+{% block navigation %}
+
+    <a href="/creator">
+        <button class="btn-lg btn-info">Pattern Creator</button>
+    </a>
+
+    <a href="/explorer">
+        <button class="btn-lg btn-info">Data Explorer</button>
+    </a>
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="container" id="vis" data-dbconfig="{{ db_config }}"></div>
+{% endblock %}
