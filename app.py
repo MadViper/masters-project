@@ -71,6 +71,15 @@ def is_valid_path(ww):
 
     return True
 
+def is_valid_path(ww):
+    current_timestamp = ww[0]['start']
+
+    for w in ww:
+        if w['start'] != current_timestamp:
+            return False
+        current_timestamp = w['finish']
+
+    return True
 
 def build_pattern(query_builder: QueryBuilder):
     query, base_params = query_builder.build()
