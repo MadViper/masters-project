@@ -20,6 +20,7 @@ function draw() {
         server_user: db_config.db_username,
         server_password: db_config.db_password,
         encrypted: db_config.encrypted,
+        trust: "TRUST_CUSTOM_CA_SIGNED_CERTIFICATES",
 
         labels: {
             "performer": {
