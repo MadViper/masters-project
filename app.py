@@ -27,6 +27,7 @@ app.config["SECRET_KEY"] = os.environ.get("APP_SECRET", default="dummy_secret")
 app.config["DB_USER"] = os.environ.get("DB_USER")
 app.config["DB_PASSWORD"] = os.environ.get("DB_PASSWORD")
 app.config["BOLT_URL"] = os.environ.get("BOLT_URL")
+app.config["DB_CONNECTION_ENCRYPTED"] = os.environ.get("DB_CONNECTION_ENCRYPTED", default="ENCRYPTION_OFF")
 
 dal = DAL(
     GraphDatabase.driver(
@@ -57,7 +58,8 @@ def explorer():
             {
                 "db_username": app.config["DB_USER"],
                 "db_password": app.config["DB_PASSWORD"],
-                "db_url": app.config["BOLT_URL"]
+                "db_url": app.config["BOLT_URL"],
+                "encrypted": app.config["DB_CONNECTION_ENCRYPTED"]
             }
         )
     )

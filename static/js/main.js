@@ -16,10 +16,10 @@ function draw() {
 
     var config = {
         container_id: "vis",
-
         server_url: db_config.db_url,
         server_user: db_config.db_username,
         server_password: db_config.db_password,
+        encrypted: db_config.encrypted,
 
         labels: {
             "performer": {
