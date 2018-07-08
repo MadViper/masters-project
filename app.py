@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import sys
 
 from flask import Flask, render_template, request, make_response
@@ -22,12 +21,7 @@ logger.addHandler(handler)
 logging.getLogger("neo4j.bolt").setLevel(logging.CRITICAL)
 
 app = Flask(__name__)
-
-app.config["SECRET_KEY"] = os.environ.get("APP_SECRET", default="dummy_secret")
-app.config["DB_USER"] = os.environ.get("DB_USER")
-app.config["DB_PASSWORD"] = os.environ.get("DB_PASSWORD")
-app.config["BOLT_URL"] = os.environ.get("BOLT_URL")
-app.config["DB_CONNECTION_ENCRYPTED"] = os.environ.get("DB_CONNECTION_ENCRYPTED", default="ENCRYPTION_OFF")
+app.config.from_object('config.DevelopmentConfig')
 
 dal = DAL(
     GraphDatabase.driver(
