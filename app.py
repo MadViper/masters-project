@@ -50,9 +50,9 @@ def explorer():
         'public/explorer.html',
         db_config=json.dumps(
             {
-                "db_username": app.config["DB_USER"],
-                "db_password": app.config["DB_PASSWORD"],
-                "db_url": app.config["BOLT_URL"],
+                "server_url": app.config["BOLT_URL"],
+                "server_user": app.config["DB_USER"],
+                "server_password": app.config["DB_PASSWORD"],
                 "encrypted": app.config["DB_CONNECTION_ENCRYPTED"]
             }
         )

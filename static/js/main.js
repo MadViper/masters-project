@@ -9,40 +9,33 @@ $('#remove-option').click(function () {
 });
 
 function draw() {
-    console.log("draw");
-    console.log(document.getElementById("vis").dataset.dbconfig);
-    var db_config = JSON.parse(document.getElementById("vis").dataset.dbconfig);
-    console.log(db_config);
+    var container_id = "vis";
+    var config_as_string = document.getElementById(container_id).dataset.config;
+    console.log(config_as_string);
+    var config = JSON.parse(config_as_string);
 
-    var config = {
-        container_id: "vis",
-        server_url: db_config.db_url,
-        server_user: db_config.db_username,
-        server_password: db_config.db_password,
-        encrypted: db_config.encrypted,
-        trust: "TRUST_CUSTOM_CA_SIGNED_CERTIFICATES",
+    config.container_id = container_id;
+    config.trust = "TRUST_CUSTOM_CA_SIGNED_CERTIFICATES";
+    config.initial_cypher = "MATCH p=()-[:works_with]->() RETURN p";
 
-        labels: {
-            "performer": {
-                caption: "name",
-                size: "pagerank",
-                community: "partition"
-            }
-        },
-
-        relationships: {
-            "works_with": {
-                caption: "case"
-                // caption: false,
-                // thickness: "count"
-            }
-        },
-
-        initial_cypher: "MATCH p=()-[:works_with]->() RETURN p"
+    config.labels = {
+        "performer": {
+            caption: "name",
+            size: "pagerank",
+            community: "partition"
+        }
     };
 
-    var vis = new NeoVis.default(config);
-    vis.render();
+    config.relationships = {
+        "works_with": {
+            caption: "case"
+            // caption: false,
+            // thickness: "count"
+        }
+    };
+
+    // noinspection JSPotentiallyInvalidConstructorUsage
+    new NeoVis.default(config).render();
 }
 
 draw();
