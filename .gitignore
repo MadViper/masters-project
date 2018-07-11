@@ -51,3 +51,6 @@ coverage.xml
 venv/
 ENV/
 .vagrant
+
+# Project specific
+data/
