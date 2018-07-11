@@ -9,8 +9,6 @@ from werkzeug.utils import secure_filename
 from dal import DAL, QueryBuilder
 from logger import logger
 
-ALLOWED_EXTENSIONS = {'csv'}
-
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
 
@@ -28,8 +26,8 @@ def main():
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    extension = filename.rsplit('.', 1)[1].lower()
+    return '.' in filename and extension in {'csv'}
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
@@ -54,15 +52,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file', filename=filename))
 
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template("public/uploader.html")
 
 
 @app.route('/uploads/<filename>')

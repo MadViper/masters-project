@@ -1,0 +1,32 @@
+{% extends "common/base.html" %}
+
+{% block body %}
+    <div class="container">
+        <h2>File uploader</h2>
+        <form class="was-validated" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="col mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="file" required>
+                        <label class="custom-file-label" for="file">Choose file...</label>
+                        <div class="invalid-feedback">File is required</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-lg">Upolad</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        // Sets chosen file name as file input label
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            console.log(fileName)
+        });
+    </script>
+{% endblock %}
