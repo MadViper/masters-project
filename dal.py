@@ -3,18 +3,32 @@ import logging
 from copy import deepcopy
 from functools import lru_cache
 
-import neo4j.v1
+from neo4j.exceptions import ServiceUnavailable
+from neo4j.v1 import GraphDatabase, basic_auth, Driver, Session
 
 logger = logging.getLogger("pywsi.dal")
 
 
 class DAL(object):
 
-    def __init__(self, driver: neo4j.v1.Driver):
+    def __init__(self, driver: Driver):
         self.driver = driver
 
+    @classmethod
+    def from_config(cls, config):
+        try:
+            driver = GraphDatabase.driver(
+                config["BOLT_URL"],
+                auth=basic_auth(config["DB_USER"], config["DB_PASSWORD"])
+            )
+        except ServiceUnavailable as e:
+            logger.warning("Could not connect to neo4j")
+            driver = None
+
+        return cls(driver)
+
     @property
-    def session(self) -> neo4j.v1.Session:
+    def session(self) -> Session:
         return self.driver.session()
 
     def run_query(self, query, *args, **kwargs):
