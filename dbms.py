@@ -77,18 +77,22 @@ def drop_data():
     run_query('MATCH (n) DETACH DELETE n')
 
 
-def main():
+def load_csv(csv_file):
+    reader = csv.DictReader(csv_file, delimiter=";")
+
     drop_data()
-
-    with open(get_csv_file()) as csv_file:
-        reader = csv.DictReader(csv_file, delimiter=";")
-        seed_data(reader)
-
+    seed_data(reader)
     create_works_with_relations()
     run_algorithms()
 
 
-if __name__ == '__main__':
-    main()
+def load_file(filename):
+    logger.info("loading {}".format(filename))
+    with open(filename) as file:
+        load_csv(file)
+    logger.info("loaded {}".format(filename))
 
-logger.info("Done!")
+
+if __name__ == '__main__':
+    load_file(get_csv_file())
+    logger.info("Dbms done!")
