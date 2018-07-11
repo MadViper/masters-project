@@ -1,3 +1,4 @@
+werkzeug
 gunicorn
 flask
 neo4j-driver

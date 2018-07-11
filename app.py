@@ -1,23 +1,20 @@
 import json
+import os
 
-from flask import Flask, render_template, request, make_response
-from neo4j.v1 import GraphDatabase, basic_auth
+from flask import Flask, flash, request, redirect, url_for
+from flask import render_template, make_response
+from flask import send_from_directory
+from werkzeug.utils import secure_filename
 
 from dal import DAL, QueryBuilder
 from logger import logger
 
+ALLOWED_EXTENSIONS = {'csv'}
+
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
 
-dal = DAL(
-    GraphDatabase.driver(
-        app.config["BOLT_URL"],
-        auth=basic_auth(
-            app.config["DB_USER"],
-            app.config["DB_PASSWORD"]
-        )
-    )
-)
+dal = DAL.from_config(app.config)
 
 
 @app.route('/status')
@@ -28,6 +25,49 @@ def status():
 @app.route('/', methods=["GET"])
 def main():
     return render_template('common/index.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file', filename=filename))
+
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 @app.route('/explorer')

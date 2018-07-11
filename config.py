@@ -9,6 +9,7 @@ class Config:
     DB_PASSWORD = None
     BOLT_URL = 'bolt://localhost:7687'
     DB_CONNECTION_ENCRYPTED = 'ENCRYPTION_OFF'
+    UPLOAD_FOLDER = 'uploads'
 
 
 class TestingConfig(Config):
