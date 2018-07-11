@@ -6,9 +6,9 @@
     <title>{% block title %} pywsi {% endblock %}</title>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link href="/static/css/main.css" rel="stylesheet" media="screen">
 
@@ -38,13 +38,18 @@
         <a href="/explorer">
             <button class="btn-lg btn-info">Data Explorer</button>
         </a>
+        <a href="/uploader">
+            <button class="btn-lg btn-info">File Uploader</button>
+        </a>
     {% endblock %}
 </div>
 
 
 <div class="container">
     {% for message in get_flashed_messages() %}
-        <div id="flash-message">{{ message }}</div>
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
     {% endfor %}
     {% block body %}{% endblock %}
 </div>

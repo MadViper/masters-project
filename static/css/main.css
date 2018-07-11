@@ -1,24 +1,7 @@
-.alert {
-    padding: 15px;
-    margin-bottom: 15px;
-    top:-15px;
-    position:relative;
-    background-color: #7a2721;
-    color: white;
-}
-
 #add-option, #remove-option {
-  width: 20px;
-  height: 20px;
-  margin: 10px;
-}
-
-#flash-message {
-  width: 100%;
-  background-color: green;
-  color: white;
-  font-weight: bold;
-  margin: 10px;
+    width: 20px;
+    height: 20px;
+    margin: 10px;
 }
 
 #vis {
