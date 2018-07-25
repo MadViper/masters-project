@@ -44,13 +44,19 @@ class DAL(object):
 
     @property
     @lru_cache(maxsize=32)
+    def activities(self):
+        q = "MATCH (a:activity) RETURN a.name as name"
+        return [record['name'] for record in self.run_query(q)]
+
+    @property
+    @lru_cache(maxsize=32)
     def cases(self):
         query = '''
         MATCH n=(c:case)-[i:includes]->()
         WITH c, i.timestamp as timestamps
         WITH c, min(timestamps) as timestamp
         SET c.timestamp = timestamp
-        RETURN c as case order by c.timestamp
+        RETURN c.id as case order by c.timestamp
         '''
         return [record['case'] for record in self.run_query(query)]
 

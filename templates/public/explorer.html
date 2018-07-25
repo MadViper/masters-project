@@ -5,7 +5,63 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container data-explorer" id="vis" data-config="{{ db_config }}"></div>
+    <div class="container">
+        <h2>Data Explorer</h2>
+        <form method="POST">
+            <div class="container">
+                <div class="form-row mb-3">
+
+                    <div class="col mb-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="performer">Case</label>
+                            </div>
+                            <select class="custom-select" id="case" name="case" title="case">
+                                <option value=".*">*</option>
+                                {% for case in cases %}
+                                    <option value={{ case }}>{{ case }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="performer">Performer</label>
+                            </div>
+                            <select class="custom-select" id="performer" name="performer" title="performer">
+                                <option value=".*">*</option>
+                                {% for performer in performers %}
+                                    <option value={{ performer }}>{{ performer }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="performer">Activity</label>
+                            </div>
+                            <select class="custom-select" id="activity" name="activity" title="activity">
+                                <option value=".*">*</option>
+                                {% for activity in activities %}
+                                    <option value={{ activity }}>{{ activity }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <button type="submit" class="btn btn-primary btn-block">Refresh</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    </form>
+    </div>
+    <div class="container" id="vis" data-config="{{ db_config }}"></div>
 {% endblock %}
 
 {% block script %}

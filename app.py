@@ -65,8 +65,13 @@ def upload_file():
     return render_template("public/uploader.html")
 
 
-@app.route('/explorer')
+@app.route('/explorer', methods=["GET", "POST"])
 def explorer():
+    if request.method == "POST":
+        logger.debug(request.form['case'])
+        logger.debug(request.form['performer'])
+        logger.debug(request.form['activity'])
+
     return render_template(
         'public/explorer.html',
         db_config=json.dumps(
@@ -76,7 +81,10 @@ def explorer():
                 "server_password": app.config["DB_PASSWORD"],
                 "encrypted": app.config["DB_CONNECTION_ENCRYPTED"]
             }
-        )
+        ),
+        cases=dal.cases,
+        performers=dal.performers,
+        activities=dal.activities
     )
 
 
