@@ -1,12 +1,12 @@
 {% extends "common/base.html" %}
+{% set title="explorer" %}
 
 {% block head %}
     <script src="https://cdn.rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h2>Data Explorer</h2>
+    <div class="container mt-3">
         <form method="POST">
             <div class="container">
                 <div class="form-row mb-3">
@@ -57,11 +57,12 @@
                     </div>
                 </div>
             </div>
+
+        </form>
     </div>
 
-    </form>
-    </div>
-    <div class="container" id="vis" data-config="{{ db_config }}"></div>
+    <div class="container mt-3" id="vis" data-config="{{ db_config }}"></div>
+
 {% endblock %}
 
 {% block script %}
