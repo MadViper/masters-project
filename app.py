@@ -82,7 +82,7 @@ def explorer():
                 "encrypted": app.config["DB_CONNECTION_ENCRYPTED"]
             }
         ),
-        cases=dal.cases,
+        cases=[case['id'] for case in dal.cases],
         performers=dal.performers,
         activities=dal.activities
     )

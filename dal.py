@@ -56,7 +56,7 @@ class DAL(object):
         WITH c, i.timestamp as timestamps
         WITH c, min(timestamps) as timestamp
         SET c.timestamp = timestamp
-        RETURN c.id as case order by c.timestamp
+        RETURN c as case order by c.timestamp
         '''
         return [record['case'] for record in self.run_query(query)]
 

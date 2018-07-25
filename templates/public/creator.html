@@ -5,37 +5,41 @@
     <div class="container mt-3">
         <form method="POST">
 
-            <div class="form-row">
-                <div class="col">
-                    <label>Performers:</label>
-                </div>
-            </div>
 
             <div class="container">
 
                 <div class="form-row">
 
-                    <div class="col">
-                        <select class="form-control" id="performer_1" name="performer_1" title="performer_1">
-                            <option value=".*">*</option>
-                            {% for performer in performers %}
-                                <option value={{ performer }}>{{ performer }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="col m-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="performer_1">Performer 1</label>
+                            </div>
+                            <select class="custom-select" id="performer_1" name="performer_1" title="performer_1">
+                                <option value=".*">*</option>
+                                {% for performer in performers %}
+                                    <option value={{ performer }}>{{ performer }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="col text-center">
+                    <div class="col m-3 text-center">
                         <label>->[:works-with]-></label>
                     </div>
 
-
-                    <div class="col">
-                        <select class="form-control" id="performer_2" name="performer_2" title="performer_2">
-                            <option value=".*">*</option>
-                            {% for performer in performers %}
-                                <option value={{ performer }}>{{ performer }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="col m-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="performer_2">Performer 2</label>
+                            </div>
+                            <select class="custom-select" id="performer_2" name="performer_2" title="performer_2">
+                                <option value=".*">*</option>
+                                {% for performer in performers %}
+                                    <option value={{ performer }}>{{ performer }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,7 +169,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-lg col">Search</button>
+                <button type="submit" class="btn btn-primary btn-block col">Search</button>
 
             </div>
 
