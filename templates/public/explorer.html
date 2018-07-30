@@ -67,34 +67,34 @@
 
 {% block script %}
     <script>
-        $(document).ready(function () {
-                var container_id = "vis";
-                var config_as_string = document.getElementById(container_id).dataset.config;
-                var config = JSON.parse(config_as_string);
 
-                config.container_id = container_id;
-                config.trust = "TRUST_CUSTOM_CA_SIGNED_CERTIFICATES";
-                config.initial_cypher = "MATCH p=()-[:works_with]->() RETURN p";
+        function loadData() {
+            var container_id = "vis";
+            var config_as_string = document.getElementById(container_id).dataset.config;
+            var config = JSON.parse(config_as_string);
 
-                config.labels = {
-                    "performer": {
-                        caption: "name",
-                        size: "pagerank",
-                        community: "partition"
-                    }
-                };
+            config.container_id = container_id;
 
-                config.relationships = {
-                    "works_with": {
-                        caption: "case"
-                        // caption: false,
-                        // thickness: "count"
-                    }
-                };
+            config.labels = {
+                "performer": {
+                    caption: "name",
+                    size: "pagerank",
+                    community: "partition"
+                }
+            };
 
-                // noinspection JSPotentiallyInvalidConstructorUsage
-                new NeoVis.default(config).render();
-            }
-        );
+            config.relationships = {
+                "works_with": {
+                    caption: "case"
+                    // caption: false,
+                    // thickness: "count"
+                }
+            };
+
+            // noinspection JSPotentiallyInvalidConstructorUsage
+            new NeoVis.default(config).render();
+        }
+
+        $(document).ready(loadData);
     </script>
 {% endblock %}

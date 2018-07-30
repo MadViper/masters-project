@@ -72,6 +72,10 @@ def explorer():
         logger.debug(request.form['performer'])
         logger.debug(request.form['activity'])
 
+    cypher = '''
+        MATCH p=()-[:works_with]->() RETURN p
+    '''
+
     return render_template(
         'public/explorer.html',
         db_config=json.dumps(
@@ -79,7 +83,8 @@ def explorer():
                 "server_url": app.config["BOLT_URL"],
                 "server_user": app.config["DB_USER"],
                 "server_password": app.config["DB_PASSWORD"],
-                "encrypted": app.config["DB_CONNECTION_ENCRYPTED"]
+                "encrypted": app.config["DB_CONNECTION_ENCRYPTED"],
+                "initial_cypher": cypher
             }
         ),
         cases=[case['id'] for case in dal.cases],
