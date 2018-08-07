@@ -53,6 +53,7 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
         file.save(file_path)
         dbms.load_file(file_path)
+        dal.reset()
         flash("File uploaded successfully")
     else:
         flash('File should have .csv extension')

@@ -2,7 +2,7 @@
 {% set title="result" %}
 
 {% block head %}
-    <script src="https://cdn.rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+    <script src="/static/js/neovis.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -24,14 +24,17 @@
             var container_id = "wsa";
             var config_as_string = document.getElementById(container_id).dataset.config;
             var config = JSON.parse(config_as_string);
+            config.initial_cypher = "" +
+                "MATCH wsa=()-[:works_with]->()\n" +
+                "FOREACH (n IN nodes(wsa) | SET n.mark = 0 SET n.pattern = \"n/a\")\n" +
+                "FOREACH (w IN relationships(wsa) | SET w.pattern = \"n/a\")\n" +
+                "RETURN wsa";
 
             config.container_id = container_id;
-            config.initial_cypher = "MATCH wsi=()-[:works_with]->() RETURN wsi";
 
             config.labels = {
                 "performer": {
-                    caption: "name",
-                    size: "pagerank"
+                    caption: "name"
                 }
             };
 
@@ -55,8 +58,7 @@
             config.labels = {
                 "performer": {
                     caption: "name",
-                    community: "mark",
-                    size: "pagerank"
+                    community: "mark"
                 }
             };
 
@@ -72,8 +74,8 @@
 
 
         $(document).ready(function () {
-            loadWsa();
             loadWsaPrime();
+            loadWsa();
         });
     </script>
 {% endblock %}
