@@ -4,7 +4,7 @@
     margin: 10px;
 }
 
-#vis {
+#vis, #wsa, #wsa_p {
     height: 550px;
     border: 1px solid lightgray;
 }

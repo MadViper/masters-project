@@ -1,0 +1,81 @@
+{% extends "common/base.html" %}
+{% set title="result" %}
+
+{% block head %}
+    <script src="/static/js/neovis.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row m-3">
+        <div class="col m-3"><h3>WSA</h3></div>
+        <div class="col m-3"><h3>WSA'</h3></div>
+    </div>
+    <div class="row m-3">
+        <div class="col m-3" id="wsa" data-config="{{ db_config }}"></div>
+        <div class="col m-3" id="wsa_p" data-config="{{ db_config }}"></div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        function loadWsa() {
+            var container_id = "wsa";
+            var config_as_string = document.getElementById(container_id).dataset.config;
+            var config = JSON.parse(config_as_string);
+            config.initial_cypher = "" +
+                "MATCH wsa=()-[:works_with]->()\n" +
+                "FOREACH (n IN nodes(wsa) | SET n.mark = 0 SET n.pattern = \"n/a\")\n" +
+                "FOREACH (w IN relationships(wsa) | SET w.pattern = \"n/a\")\n" +
+                "RETURN wsa";
+
+            config.container_id = container_id;
+
+            config.labels = {
+                "performer": {
+                    caption: "name"
+                }
+            };
+
+            config.relationships = {
+                "works_with": {
+                    caption: "case"
+                }
+            };
+
+            // noinspection JSPotentiallyInvalidConstructorUsage
+            new NeoVis.default(config).render();
+        }
+
+        function loadWsaPrime() {
+            var container_id = "wsa_p";
+            var config_as_string = document.getElementById(container_id).dataset.config;
+            var config = JSON.parse(config_as_string);
+
+            config.container_id = container_id;
+
+            config.labels = {
+                "performer": {
+                    caption: "name",
+                    community: "mark"
+                }
+            };
+
+            config.relationships = {
+                "works_with": {
+                    caption: "case"
+                }
+            };
+
+            // noinspection JSPotentiallyInvalidConstructorUsage
+            new NeoVis.default(config).render();
+        }
+
+
+        $(document).ready(function () {
+            loadWsaPrime();
+            loadWsa();
+        });
+    </script>
+{% endblock %}

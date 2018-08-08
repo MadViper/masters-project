@@ -2,7 +2,7 @@
 {% set title="explorer" %}
 
 {% block head %}
-    <script src="https://cdn.rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+    <script src="/static/js/neovis.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -47,40 +47,6 @@
                             </div>
 
                         </div>
-
-                        <div class="form-row mt-3">
-
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="performer">Performer</label>
-                                </div>
-                                <select class="custom-select" id="performer" name="performer" title="performer">
-                                    <option value=".*">*</option>
-                                    {% for performer in performers %}
-                                        {% if performer == selected_performer %}
-                                            <option selected value={{ performer }}>{{ performer }}</option>
-                                        {% else %}
-                                            <option value={{ performer }}>{{ performer }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="input-group mt-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        {% if display_works_with %}
-                                            <input checked type="checkbox" id="works_with" name="works_with">
-                                        {% else %}
-                                            <input type="checkbox" id="works_with" name="works_with">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <label for="works_with" class="form-control">WORKS_WITH</label>
-                            </div>
-
-                        </div>
-
                         <div class="form-row mt-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -115,6 +81,59 @@
 
 
                         <div class="form-row mt-3">
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="performer">Performer 1</label>
+                                </div>
+                                <select class="custom-select" id="performer_1" name="performer_1" title="performer_1">
+                                    <option value=".*">*</option>
+                                    {% for performer in performers %}
+                                        {% if performer == selected_performer_1 %}
+                                            <option selected value={{ performer }}>{{ performer }}</option>
+                                        {% else %}
+                                            <option value={{ performer }}>{{ performer }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        {% if display_works_with %}
+                                            <input checked type="checkbox" id="works_with" name="works_with">
+                                        {% else %}
+                                            <input type="checkbox" id="works_with" name="works_with">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <label for="works_with" class="form-control">WORKS_WITH</label>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row mt-3">
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="performer">Performer 2</label>
+                                </div>
+                                <select class="custom-select" id="performer_2" name="performer_2" title="performer_2">
+                                    <option value=".*">*</option>
+                                    {% for performer in performers %}
+                                        {% if performer == selected_performer_2 %}
+                                            <option selected value={{ performer }}>{{ performer }}</option>
+                                        {% else %}
+                                            <option value={{ performer }}>{{ performer }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row mt-3">
                             <button type="submit" class="btn btn-primary btn-block">Fetch Data</button>
                         </div>
                     </div>
@@ -144,9 +163,7 @@
                     community: "partition"
                 },
                 "activity": {
-                    caption: "name",
-                    {#size: "pagerank",#}
-                    {#community: "partition"#}
+                    caption: "name"
                 },
 
                 "case": {
@@ -157,16 +174,14 @@
             config.relationships = {
                 "works_with": {
                     caption: "case"
-                    // caption: false,
-                    // thickness: "count"
                 },
 
                 "includes": {
-                    caption: false
+                    caption: "case"
                 },
 
                 "performed": {
-                    caption: false
+                    caption: "case"
                 }
             };
 

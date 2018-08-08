@@ -3,7 +3,7 @@
 
 {% block body %}
     <div class="container mt-3">
-        <form class="was-validated" method="POST" enctype="multipart/form-data">
+        <form id="upload-form" class="was-validated" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="col mb-3">
                     <div class="custom-file">
@@ -18,15 +18,76 @@
             <button type="submit" class="btn btn-lg">Upolad</button>
         </form>
     </div>
+
+    <div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uploading...</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                             aria-valuenow="75"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block script %}
     <script>
+        var files;
         // Sets chosen file name as file input label
-        $('.custom-file-input').on('change', function () {
+        $('.custom-file-input').on('change', function (event) {
             var fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            files = event.target.files;
             console.log(fileName)
+        });
+
+        $('#upload-form').on('submit', function () {
+            event.stopPropagation(); // Stop stuff happening
+            event.preventDefault(); // Totally stop stuff happening
+
+            // START A LOADING SPINNER HERE
+            $("#loadingModal").modal('show');
+
+            // Create a formdata object and add the files
+            var data = new FormData();
+            $.each(files, function (key, value) {
+                data.append('file', value);
+            });
+
+            $.ajax({
+                type: 'POST',
+                data: data,
+                cache: false,
+                processData: false, // Don't process the files
+                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                success: function (data, textStatus, jqXHR) {
+                    if (typeof data.error === 'undefined') {
+                        // Success so call function to process the form
+                        console.log("Success");
+                        location.reload();
+                    }
+                    else {
+                        // Handle errors here
+                        console.log('ERRORSa: ' + data.error);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(errorThrown);
+                    // Handle errors here
+                    console.log('ERRORsS: ' + textStatus);
+                    // STOP LOADING SPINNER
+                    location.reload();
+                }
+            });
         });
     </script>
 {% endblock %}

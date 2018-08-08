@@ -36,21 +36,26 @@ class DAL(object):
         with self.session as session:
             return session.run(query, *args, **kwargs)
 
-    @property
-    @lru_cache(maxsize=32)
-    def performers(self):
+    @lru_cache(maxsize=1)
+    def fetch_performers(self):
         q = "MATCH (p:performer) RETURN p.name as name ORDER BY p.name"
         return [record['name'] for record in self.run_query(q)]
 
     @property
-    @lru_cache(maxsize=32)
-    def activities(self):
+    def performers(self):
+        return self.fetch_performers()
+
+    @lru_cache(maxsize=1)
+    def fetch_activities(self):
         q = "MATCH (a:activity) RETURN a.name as name"
         return [record['name'] for record in self.run_query(q)]
 
     @property
-    @lru_cache(maxsize=32)
-    def cases(self):
+    def activities(self):
+        return self.fetch_activities()
+
+    @lru_cache(maxsize=1)
+    def fetch_cases(self):
         query = '''
         MATCH n=(c:case)-[i:includes]->()
         WITH c, i.timestamp as timestamps
@@ -61,7 +66,10 @@ class DAL(object):
         return [record['case'] for record in self.run_query(query)]
 
     @property
-    @lru_cache(maxsize=32)
+    def cases(self):
+        return self.fetch_cases()
+
+    @property
     def performers_by_case(self):
         performers = collections.defaultdict(list)
 
@@ -70,6 +78,11 @@ class DAL(object):
             performers[record["case"]].append(record["performer"])
 
         return performers
+
+    def reset(self):
+        self.fetch_activities.cache_clear()
+        self.fetch_performers.cache_clear()
+        self.fetch_cases.cache_clear()
 
     @property
     def color_case(self):
@@ -151,8 +164,8 @@ class QueryBuilder:
 
     def __init__(self):
         self.pattern_length = None
-        self.pattern_length_to = ''
-        self.pattern_length_from = ''
+        self.pattern_length_to = 2
+        self.pattern_length_from = 1
 
         self.performer_one = '.*'
         self.performer_two = '.*'
@@ -163,24 +176,48 @@ class QueryBuilder:
     @property
     def length_range(self):
         if self.pattern_length:
-            return self.pattern_length
+            return "*{}".format(self.pattern_length)
 
-        return '{}..{}'.format(self.pattern_length_from, self.pattern_length_to)
+        return '*{}..{}'.format(self.pattern_length_from, self.pattern_length_to)
 
     def build(self):
-        base_params = {"p1": self.performer_one, "p2": self.performer_two}
+        length_range = self.length_range
+        if length_range == '*..':
+            length_range = ''
 
         query = f'''
-        MATCH n=(p1)-[:works_with*{self.length_range} {{case: $case}}]->(p2)
+        MATCH wsa=()-[:works_with]->()
+        FOREACH (n IN nodes(wsa) | SET n.mark = 0 SET n.pattern = "no")
+        FOREACH (w IN relationships(wsa) | SET w.pattern = "no")
+
+        WITH wsa
+        MATCH wsa_p=(p1)-[:works_with{self.length_range}]->(p2)
         WHERE
-            p1.name =~$p1 and p2.name =~$p2
+            p1.name =~ "{self.performer_one}" and
+            p2.name =~ "{self.performer_two}"
             {"and p1.name<>p2.name" if self.different_performer else ''}
-        WITH relationships(n) as ww
-        WITH ww[0] as first, ww[-1] as last, ww
-        WHERE
-            last.finish - first.start > 0
-            {"and last.a2=first.a1" if self.same_activity else ''}
-        RETURN ww
+        FOREACH (n IN nodes(wsa_p) | SET n.mark = 1 SET n.pattern = "yes")
+        FOREACH (w IN relationships(wsa_p) | SET w.pattern = "yes")
+
+        RETURN wsa
         '''
 
-        return query, base_params
+        return query
+
+    # def build(self):
+    #     base_params = {"p1": self.performer_one, "p2": self.performer_two}
+    #
+    #     query = f'''
+    #     MATCH n=(p1)-[:works_with*{self.length_range} {{case: $case}}]->(p2)
+    #     WHERE
+    #         p1.name =~$p1 and p2.name =~$p2
+    #         {"and p1.name<>p2.name" if self.different_performer else ''}
+    #     WITH relationships(n) as ww
+    #     WITH ww[0] as first, ww[-1] as last, ww
+    #     WHERE
+    #         last.finish - first.start > 0
+    #         {"and last.a2=first.a1" if self.same_activity else ''}
+    #     RETURN ww
+    #     '''
+    #
+    #     return query, base_params
